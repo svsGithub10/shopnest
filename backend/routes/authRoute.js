@@ -1,0 +1,32 @@
+const express = require("express");
+const { createUser, signinUser, getallUsers, getUser, deleteUser, updatedUser, blockUser, unblockUser, handleRefreshToken, updatePassword, forgotPasswordToken, forgotPassword, signinAdmin, getWishlist, addToCart, getCart, removeCart, applyCoupon, createOrder, getOrders, updateOrderStatus, updateCart, getUserOrders, getComparelist, getOrder } = require("../controllers/userController");
+const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
+const router = express.Router();
+
+router.post("/signup", createUser);
+router.post("/signin", signinUser);
+router.post("/signin-admin", signinAdmin);
+router.post("/cart", authMiddleware, addToCart);
+router.post("/create-order", authMiddleware, createOrder);
+router.post("/apply-coupon", authMiddleware, applyCoupon);
+router.put("/cart/:id", authMiddleware, updateCart);
+router.put("/forgot-password-token", forgotPasswordToken);
+router.put("/forgot-password/:token", forgotPassword);
+router.put("/update-password", authMiddleware, updatePassword);
+router.get("/all-users", getallUsers);
+router.get("/orders", authMiddleware, getUserOrders);
+router.get("/wishlist", authMiddleware, getWishlist);
+router.get("/comparelist", authMiddleware, getComparelist);
+router.get("/cart", authMiddleware, getCart);
+router.get("/all-orders", authMiddleware, isAdmin, getOrders);
+router.get("/order/:id", authMiddleware, isAdmin, getOrder);
+router.get("/:id", authMiddleware, isAdmin, getUser);
+router.get("/refresh", handleRefreshToken);
+router.delete("/cart/:id", authMiddleware, removeCart);
+router.delete("/:id", authMiddleware, isAdmin, deleteUser);
+router.put("/orders/update-order/:id", authMiddleware, isAdmin, updateOrderStatus);
+router.put("/update-user", authMiddleware, updatedUser);
+router.put("/block-user/:id", authMiddleware, isAdmin, blockUser);
+router.put("/unblock-user/:id", authMiddleware, isAdmin, unblockUser);
+
+module.exports = router;
